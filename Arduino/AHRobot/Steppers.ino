@@ -1,5 +1,8 @@
 // AHR AIR HOCKEY ROBOT PROJECT
 
+// Attack: Y axis
+// Protect: X axis 
+
 // STEPPERS MOTOR CONTROL
 // Updated: Now it supports DRV8825 drivers
 // SPEED, ACCELERATION AND POSITION CONTROL using Arduino 16 bit Timer interrupts
@@ -24,14 +27,14 @@
 
 
 // TIMER 1 : STEPPER MOTOR SPEED CONTROL X-AXIS
-ISR(TIMER1_COMPA_vect)
+ISR(TIMER1_COMPA_vect) //Specifies a named Interrupt Service Routine (ISR) to call when an interrupt occurs.
 {
   if (dir_x==0)
     return;
 
-  SET(PORTF,0); // STEP X-AXIS
+  SET(PORTF,0); // STEP X-AXIS  //pin
   position_x += dir_x;
-  __asm__ __volatile__ (
+  __asm__ __volatile__ ( //delay control
     "nop" "\n\t"
     "nop" "\n\t"
     "nop" "\n\t"
@@ -98,8 +101,10 @@ void positionControl()
 
   // We use an acceleration ramp to imitate an S-curve profile at the begining and end (depend on speed)
   acceleration_x = map(abs(speed_x),0,accel_ramp,MIN_ACCEL_X,max_acceleration_x);
+  // map(value, fromLow, fromHigh, toLow, toHigh)
   acceleration_x = constrain(acceleration_x,MIN_ACCEL_X,max_acceleration_x);
-
+  // constrain(x, a, b)
+  // Constrains a number to be within a range.
   acceleration_y = map(abs(speed_y),0,accel_ramp,MIN_ACCEL_Y,max_acceleration_y);
   acceleration_y = constrain(acceleration_y,MIN_ACCEL_Y,max_acceleration_y);
 
